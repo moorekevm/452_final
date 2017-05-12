@@ -46,7 +46,7 @@ full_text = full_text[0].strip()
 
 # Search for common chapter heading patterns like "Chapter 1" or "Section 32"
 # The newlines above and below help by identifying clearly demarcated headings.
-split_text = re.split("\n[A-Za-z]{4,}\s[0-9]{1,2}\n\n", full_text)
+split_text = re.split("\n[A-Za-z]{4,}\s[0-9]{1,2}\s?[A-Za-z\s;:']*\n\n", full_text)
 
 # If that split didn't work, try it again using Roman numerals instead of numbers.
 if len(split_text) == 1:
@@ -58,7 +58,7 @@ chapter_counter = 0
 # This chunk creates a new directory to store all the chapter text files I'll be writing
 # The "Try: Except:" structure came from this Stack Overflow question:
     # http://stackoverflow.com/questions/273192/how-to-check-if-a-directory-exists-and-create-it-if-necessary
-file_path = book_check + "/chapter_text.txt"
+file_path = book_check.title() + "/chapter_text.txt"
 directory = os.path.dirname(file_path)
 
 try:
@@ -124,17 +124,17 @@ for chapter in chapter_lengths:
     current_chapter += 1
 
 most_used_words = []
-print("\n\nHere are the five most used words in", book_check.title().replace("_", " ") + ":")
+print("\n\nHere are the 10 most used words in", book_check.title().replace("_", " ") + ":")
 
-for i in range(5):
+for i in range(10):
     max = 0
     max_word = ""
-    # Iterate through the dictionary to find the most repeated word, delete it from the dictionary, and repeat 5 total times
+    # Iterate through the dictionary to find the most repeated word, delete it from the dictionary, and repeat 10 total times
     for word in word_use:
         if word_use[word] > max:
             max = word_use[word]
             max_word = word
-    most_used_words.append("'" + max_word + "' is used " + str(max) + " times.")
+    most_used_words.append('"' + max_word + '" is used ' + str(max) + " times.")
     del word_use[max_word]
 
 for word in most_used_words:
